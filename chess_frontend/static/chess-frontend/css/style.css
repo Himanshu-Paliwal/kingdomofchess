@@ -1,0 +1,691 @@
+/* ============================================
+   Kingdom of Chess — Global Styles
+   ============================================ */
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #0f0f1a;
+    --bg-secondary: #1a1a2e;
+    --bg-card: #16213e;
+    --bg-card-hover: #1a2744;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0b0;
+    --gold: #f5c518;
+    --gold-dark: #c9a00c;
+    --gold-light: #ffd93d;
+    --light-square: #f0d9b5;
+    --dark-square: #b58863;
+    --light-square-highlight: #f7ec8f;
+    --dark-square-highlight: #d4a730;
+    --success: #4caf50;
+    --error: #f44336;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+}
+
+a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--gold-light);
+}
+
+/* ============================================
+   Navigation
+   ============================================ */
+.navbar {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--gold-dark);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--gold) !important;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(245, 197, 24, 0.3);
+}
+
+.navbar-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    list-style: none;
+}
+
+.navbar-links a {
+    color: var(--text-primary);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.navbar-links a:hover {
+    color: var(--gold);
+    background: rgba(245, 197, 24, 0.1);
+}
+
+.navbar-links a.active {
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+}
+
+/* ============================================
+   Messages (Django messages framework)
+   ============================================ */
+.messages {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.message {
+    padding: 1rem 2rem;
+    margin: 0.5rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+}
+
+.message.success {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid var(--success);
+    color: var(--success);
+}
+
+.message.error {
+    background: rgba(244, 67, 54, 0.2);
+    border: 1px solid var(--error);
+    color: var(--error);
+}
+
+.message.info {
+    background: rgba(33, 150, 243, 0.2);
+    border: 1px solid #2196f3;
+    color: #2196f3;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* ============================================
+   Chess Board
+   ============================================ */
+.chess-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+}
+
+.board-wrapper {
+    position: relative;
+}
+
+.board-coordinates-row {
+    display: flex;
+    justify-content: space-around;
+    padding-left: 30px;
+    width: calc(70px * 8 + 30px);
+}
+
+.board-coordinates-row span {
+    width: 70px;
+    text-align: center;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+}
+
+.board-with-coords {
+    display: flex;
+}
+
+.board-coordinates-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-right: 5px;
+    width: 25px;
+}
+
+.board-coordinates-col span {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+}
+
+.chess-board {
+    display: grid;
+    grid-template-columns: repeat(8, 70px);
+    grid-template-rows: repeat(8, 70px);
+    border: 3px solid var(--gold-dark);
+    box-shadow: 0 0 30px rgba(245, 197, 24, 0.2), 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.square {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    user-select: none;
+}
+
+.square.light {
+    background-color: var(--light-square);
+}
+
+.square.dark {
+    background-color: var(--dark-square);
+}
+
+.square.highlight {
+    position: relative;
+}
+
+.square.light.highlight {
+    background-color: var(--light-square-highlight);
+}
+
+.square.dark.highlight {
+    background-color: var(--dark-square-highlight);
+}
+
+.square .piece {
+    cursor: grab;
+    transition: transform 0.1s ease;
+}
+
+.square .piece:active {
+    cursor: grabbing;
+    transform: scale(1.15);
+}
+
+.piece-white {
+    color: #ffffff !important;
+    text-shadow: 
+        0 0 2px #000, 
+        1px 1px 2px #000, 
+        -1px -1px 2px #000, 
+        1px -1px 2px #000, 
+        -1px 1px 2px #000, 
+        0 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+.piece-black {
+    color: #121212 !important;
+    text-shadow: 
+        0 0 2px rgba(255, 255, 255, 0.8), 
+        1px 1px 1px rgba(255, 255, 255, 0.4), 
+        -1px -1px 1px rgba(255, 255, 255, 0.4), 
+        0 3px 6px rgba(0, 0, 0, 0.9);
+}
+
+.square.drag-over {
+    outline: 3px solid var(--gold);
+    outline-offset: -3px;
+}
+
+/* ============================================
+   Side Panel (Chess page)
+   ============================================ */
+.side-panel {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+    border: 1px solid var(--gold-dark);
+    border-radius: 12px;
+    padding: 2rem;
+    min-width: 280px;
+    max-width: 320px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.side-panel h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.side-panel p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* ============================================
+   Auth Pages (Login / Signup)
+   ============================================ */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    padding: 2rem;
+}
+
+.auth-card {
+    background: linear-gradient(135deg, rgba(22, 33, 62, 0.9), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(245, 197, 24, 0.2);
+    border-radius: 16px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 197, 24, 0.05);
+}
+
+.auth-card h1 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+}
+
+.auth-card .subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    background: rgba(15, 15, 26, 0.8);
+    border: 1px solid rgba(245, 197, 24, 0.2);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(245, 197, 24, 0.15);
+}
+
+.form-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+/* Django form rendering */
+.auth-card form p {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.auth-card form p label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.auth-card form p input {
+    background: rgba(15, 15, 26, 0.8);
+    border: 1px solid rgba(245, 197, 24, 0.2);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card form p input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(245, 197, 24, 0.15);
+}
+
+.auth-card .helptext {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.auth-card .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0.3rem 0;
+}
+
+.auth-card .errorlist li {
+    color: var(--error);
+    font-size: 0.85rem;
+    padding: 0.2rem 0;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: #1a1a2e;
+    box-shadow: 0 4px 15px rgba(245, 197, 24, 0.3);
+}
+
+.btn-gold:hover {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 197, 24, 0.4);
+    color: #1a1a2e;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+}
+
+.btn-outline:hover {
+    background: var(--gold);
+    color: #1a1a2e;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* ============================================
+   Rankings / Leaderboard
+   ============================================ */
+.rankings-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.rankings-container h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.rankings-subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.rankings-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.rankings-table thead {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+}
+
+.rankings-table th {
+    padding: 1rem 1.2rem;
+    text-align: left;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--gold-dark);
+}
+
+.rankings-table td {
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rankings-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.rankings-table tbody tr:hover {
+    background-color: var(--bg-card-hover);
+}
+
+.rankings-table .rank {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    width: 60px;
+}
+
+.rank-1 .rank { color: var(--gold); }
+.rank-2 .rank { color: var(--silver); }
+.rank-3 .rank { color: var(--bronze); }
+
+.rank-1 { background: rgba(245, 197, 24, 0.08) !important; }
+.rank-2 { background: rgba(192, 192, 192, 0.06) !important; }
+.rank-3 { background: rgba(205, 127, 50, 0.06) !important; }
+
+.rank-badge {
+    font-size: 1.3rem;
+    margin-right: 0.5rem;
+}
+
+.player-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.player-rating {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.stat {
+    color: var(--text-secondary);
+}
+
+.win-rate {
+    font-weight: 600;
+}
+
+.win-rate.good { color: var(--success); }
+.win-rate.ok { color: var(--gold); }
+.win-rate.bad { color: var(--error); }
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+}
+
+.empty-state .icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   Auth Links
+   ============================================ */
+.auth-links {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.auth-links a {
+    font-weight: 600;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+.footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 3rem;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .navbar-links {
+        gap: 1rem;
+    }
+
+    .chess-board {
+        grid-template-columns: repeat(8, 50px);
+        grid-template-rows: repeat(8, 50px);
+    }
+
+    .square {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+    }
+
+    .board-coordinates-row {
+        width: calc(50px * 8 + 30px);
+    }
+
+    .board-coordinates-row span {
+        width: 50px;
+    }
+
+    .board-coordinates-col span {
+        height: 50px;
+    }
+
+    .chess-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .side-panel {
+        max-width: 100%;
+        min-width: auto;
+    }
+
+    .auth-card {
+        padding: 2rem;
+    }
+
+    .rankings-table {
+        font-size: 0.85rem;
+    }
+
+    .rankings-table th,
+    .rankings-table td {
+        padding: 0.6rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .chess-board {
+        grid-template-columns: repeat(8, 40px);
+        grid-template-rows: repeat(8, 40px);
+    }
+
+    .square {
+        width: 40px;
+        height: 40px;
+        font-size: 1.6rem;
+    }
+
+    .board-coordinates-row {
+        width: calc(40px * 8 + 30px);
+    }
+
+    .board-coordinates-row span {
+        width: 40px;
+    }
+
+    .board-coordinates-col span {
+        height: 40px;
+    }
+}

@@ -1,0 +1,119 @@
+{% extends 'chess-frontend/base.html' %}
+
+{% block title %}Rankings - Kingdom of Chess{% endblock %}
+
+{% block content %}
+<style>
+    .rankings-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    .rankings-header h2 {
+        color: #f5c518;
+        font-size: 2.5rem;
+    }
+    
+    .table-container {
+        background-color: #16213e;
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        overflow-x: auto;
+    }
+    
+    .rankings-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+    
+    .rankings-table th, .rankings-table td {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .rankings-table th {
+        color: #f5c518;
+        font-family: 'Cinzel', serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .rankings-table tr {
+        transition: background-color 0.2s;
+    }
+    
+    .rankings-table tbody tr:hover {
+        background-color: rgba(245, 197, 24, 0.1);
+    }
+    
+    .rank-1 td { color: #ffd700; font-weight: bold; }
+    .rank-2 td { color: #c0c0c0; font-weight: bold; }
+    .rank-3 td { color: #cd7f32; font-weight: bold; }
+    
+    .rank-badge {
+        display: inline-block;
+        width: 30px;
+        text-align: center;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #aaa;
+        font-style: italic;
+    }
+</style>
+
+<div class="rankings-header">
+    <h2 class="cinzel">♔ Hall of Champions ♔</h2>
+    <p>The greatest minds in the Kingdom.</p>
+</div>
+
+<div class="table-container">
+    {% if players %}
+        <table class="rankings-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Rating</th>
+                    <th>Games</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Draws</th>
+                    <th>Win Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players %}
+                    <tr class="{% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% endif %}">
+                        <td>
+                            <span class="rank-badge">
+                                {% if forloop.counter == 1 %}👑
+                                {% elif forloop.counter == 2 %}🥈
+                                {% elif forloop.counter == 3 %}🥉
+                                {% else %}
+                                    {{ forloop.counter }}
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>{{ player.user.username }}</td>
+                        <td>{{ player.rating }}</td>
+                        <td>{{ player.games_played }}</td>
+                        <td>{{ player.wins }}</td>
+                        <td>{{ player.losses }}</td>
+                        <td>{{ player.draws }}</td>
+                        <td>{{ player.win_rate }}%</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-state">
+            <p>No players yet. Be the first to join the Hall of Champions!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

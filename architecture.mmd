@@ -1,0 +1,71 @@
+flowchart TD
+    %% ==========================================
+    %% KINGDOM OF CHESS - SYSTEM ARCHITECTURE
+    %% ==========================================
+
+    subgraph Client["Frontend Client (Browser)"]
+        UI["Web UI Layer"]
+        Board["Interactive Chess Board (index.html)"]
+        AuthViews["Auth Views (login.html, signup.html)"]
+        Leaderboard["Rankings Table (rankings.html)"]
+        ClientScript["Client Controller (Fetch API / DOM Engine)"]
+    end
+
+    subgraph Backend["Django Server Application (chess_frontend)"]
+        Router["URL Dispatcher (urls.py)"]
+
+        subgraph Controllers["Views & Controllers (views.py)"]
+            PageCtrl["Template Views (index, login, signup, rankings)"]
+            API_State["GET /api/game-state/"]
+            API_Legal["GET /api/legal-moves/"]
+            API_Move["POST /api/make-move/"]
+            API_New["POST /api/new-game/"]
+        end
+
+        subgraph CoreEngine["Game & Business Logic Layer"]
+            PyChess["python-chess Core Engine (chess.Board)"]
+            RuleValidator["FIDE Rule Validator & Legal Move Generator"]
+            FENSerializer["FEN State Serializer / Parser"]
+            AuthEngine["Django Authentication & Session Middleware"]
+        end
+    end
+
+    subgraph DataStore["Persistence & Storage Layer"]
+        SQLiteDB[("SQLite Database (db.sqlite3)")]
+        UserTable[("auth_user (Credentials & Account)")]
+        ProfileTable[("PlayerProfile (Elo Rating, Wins, Losses)")]
+        SessionCache[("django_session (Active Game FEN String)")]
+    end
+
+    %% Client Interactions
+    Board --> ClientScript
+    AuthViews --> Router
+    Leaderboard --> Router
+    ClientScript --> Router
+
+    %% Routing
+    Router --> PageCtrl
+    Router --> API_State
+    Router --> API_Legal
+    Router --> API_Move
+    Router --> API_New
+
+    %% Controllers to Core Engine
+    PageCtrl --> AuthEngine
+    API_State --> FENSerializer
+    API_Legal --> RuleValidator
+    API_Move --> RuleValidator
+    API_Move --> PyChess
+    API_New --> PyChess
+
+    PyChess --> RuleValidator
+    PyChess --> FENSerializer
+
+    %% Core Engine to Data Store
+    AuthEngine --> UserTable
+    PageCtrl --> ProfileTable
+    FENSerializer --> SessionCache
+    UserTable --> SQLiteDB
+    ProfileTable --> SQLiteDB
+    SessionCache --> SQLiteDB
+

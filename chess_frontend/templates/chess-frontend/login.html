@@ -1,0 +1,104 @@
+{% extends 'chess-frontend/base.html' %}
+
+{% block title %}Login - Kingdom of Chess{% endblock %}
+
+{% block content %}
+<style>
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+    }
+    .auth-card {
+        background: rgba(22, 33, 62, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(245, 197, 24, 0.3);
+        border-radius: 12px;
+        padding: 3rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        text-align: center;
+    }
+    .auth-title {
+        color: #f5c518;
+        margin-bottom: 2rem;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 4px;
+        border: 1px solid #333;
+        background-color: #1a1a2e;
+        color: #fff;
+        box-sizing: border-box;
+    }
+    .btn-gold {
+        background-color: #f5c518;
+        color: #1a1a2e;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 4px;
+        width: 100%;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 1rem;
+    }
+    .btn-gold:hover {
+        background-color: #e0b416;
+    }
+    .auth-link {
+        color: #aaa;
+        display: block;
+        margin-top: 1.5rem;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .auth-link:hover {
+        color: #f5c518;
+    }
+    .errorlist {
+        color: #ff4d4d;
+        list-style: none;
+        padding: 0;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="cinzel auth-title">Enter the Kingdom 👑</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username ♞</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+            </div>
+            
+            <button type="submit" class="btn-gold">Login</button>
+        </form>
+        <a href="{% url 'signup' %}" class="auth-link">New here? Create an account</a>
+    </div>
+</div>
+{% endblock %}
